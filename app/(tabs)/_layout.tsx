@@ -1,33 +1,81 @@
+// app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router';
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { COLORS, FONTS } from '../../src/constants/theme';
+import TopBar from '@/src/components/TopBar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
+  
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+        header: () => <TopBar />,
+        tabBarActiveTintColor: '#FFFFFF',
+        tabBarInactiveTintColor: COLORS.textSecondary,
+        tabBarStyle: {
+          backgroundColor: COLORS.surface,
+          borderTopWidth: 0,
+          height: 64 + insets.bottom,          // الارتفاع + مساحة أزرار النظام
+          paddingBottom: 8 + insets.bottom,    // المحتوى بيرتفع فوقها
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontFamily: FONTS.regular,
+          fontSize: 11,
+        },
+        tabBarActiveBackgroundColor: COLORS.primary,
+        tabBarItemStyle: {
+          borderRadius: 14,
+          marginHorizontal: 6,
+          overflow: 'hidden',
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'الرئيسية',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="reports"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'البلاغات',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="warning" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="map"
+        options={{
+          title: 'الخريطة',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="adoption"
+        options={{
+          title: 'التبني',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="paw" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'حسابي',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>

@@ -1,0 +1,74 @@
+import { View, Image, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Card from './Card';
+import Chip from './Chip';
+import AppText from './AppText';
+import Button from './Button';
+import { Report } from '../types';
+import { COLORS, FONT_SIZES, FONTS, SPACING } from '../constants/theme';
+
+type Props = {
+  report: Report;
+  onHelpPress: () => void;
+};
+
+const STATUS_CONFIG = {
+  pending: { label: 'قيد الانتظار', color: COLORS.statusPending },
+  approved: { label: 'عاجل', color: COLORS.danger },
+  closed: { label: 'مغلق', color: COLORS.statusClosed },
+};
+
+export default function ReportCard({ report, onHelpPress }: Props) {
+  const status = STATUS_CONFIG[report.status];
+
+  return (
+    <Card>
+      <View>
+        <Image source={{ uri: report.imageUrl }} style={styles.image} />
+        <View style={styles.chipOverlay}>
+          <Chip label={status.label} color={status.color} />
+        </View>
+      </View>
+
+      <View style={styles.body}>
+        <AppText style={styles.title}>{report.description}</AppText>
+
+        <View style={styles.locationRow}>
+          <Ionicons name="location" size={16} color={COLORS.textSecondary} />
+          <AppText style={styles.location}>حي المزة، دمشق</AppText>
+        </View>
+
+        <Button title="استجابة" variant="primary" onPress={onHelpPress} />
+      </View>
+    </Card>
+  );
+}
+
+const styles = StyleSheet.create({
+  image: {
+    width: '100%',
+    height: 180,
+  },
+  chipOverlay: {
+    position: 'absolute',
+    top: SPACING.sm,
+    start: SPACING.sm,           
+  },
+  body: {
+    padding: SPACING.md,
+    gap: SPACING.sm,
+  },
+  title: {
+    fontFamily: FONTS.bold,
+    fontSize: FONT_SIZES.title,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.xs,
+  },
+  location: {
+    fontSize: FONT_SIZES.label,
+    color: COLORS.textSecondary,
+  },
+});
