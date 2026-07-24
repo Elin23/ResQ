@@ -1,30 +1,90 @@
-import { View, Pressable, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import AppText from './AppText';
-import { COLORS, FONTS, FONT_SIZES, SPACING } from '../constants/theme';
+import { Ionicons } from "@expo/vector-icons";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { COLORS, FONTS, FONT_SIZES, SPACING } from "../constants/theme";
+import AppText from "./AppText";
+
+type IconName = keyof typeof Ionicons.glyphMap;
 
 type Props = {
-  onProfilePress?: () => void;
-  onNotificationsPress?: () => void;
+  title?: string;
+  leftIcon?: IconName;
+  rightIcon?: IconName;
+  onLeftPress?: () => void;
+  onRightPress?: () => void;
+  leftComponent?: React.ReactNode;
+  rightComponent?: React.ReactNode;
+  centerComponent?: React.ReactNode;
+  backgroundColor?: string;
+  style?: StyleProp<ViewStyle>;
 };
 
-export default function TopBar({ onProfilePress, onNotificationsPress }: Props) {
+export default function TopBar({
+  title = "ResQ",
+  leftIcon,
+  rightIcon,
+  onLeftPress,
+  onRightPress,
+  leftComponent,
+  rightComponent,
+  centerComponent,
+  backgroundColor = COLORS.background,
+  style,
+}: Props) {
   return (
-    <SafeAreaView edges={['top']} style={styles.safe}>
-      <View style={styles.bar}>
-        <Pressable onPress={onProfilePress} style={styles.iconButton}>
-          <Ionicons name="person-circle-outline" size={26} color={COLORS.text} />
-        </Pressable>
-
-        <View style={styles.logoRow}>
-          <Ionicons name="paw" size={22} color={COLORS.primary} />
-          <AppText style={styles.logo}>ResQ</AppText>
+    <SafeAreaView
+      edges={["top"]}
+      style={[
+        styles.safe,
+        {
+          backgroundColor,
+        },
+        style,
+      ]}
+    >
+      <View style={styles.container}>
+        <View style={styles.side}>
+          {leftComponent ? (
+            leftComponent
+          ) : leftIcon ? (
+            <Pressable
+              onPress={onLeftPress}
+              style={({ pressed }) => [
+                styles.iconButton,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Ionicons name={leftIcon} size={24} color={COLORS.text} />
+            </Pressable>
+          ) : null}
         </View>
 
-        <Pressable onPress={onNotificationsPress} style={styles.iconButton}>
-          <Ionicons name="notifications-outline" size={24} color={COLORS.text} />
-        </Pressable>
+        <View style={styles.center}>
+          {centerComponent ?? <AppText style={styles.title}>{title}</AppText>}
+        </View>
+
+        <View style={styles.side}>
+          {rightComponent ? (
+            rightComponent
+          ) : rightIcon ? (
+            <Pressable
+              onPress={onRightPress}
+              style={({ pressed }) => [
+                styles.iconButton,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Ionicons name={rightIcon} size={24} color={COLORS.text} />
+            </Pressable>
+          ) : null}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -32,26 +92,38 @@ export default function TopBar({ onProfilePress, onNotificationsPress }: Props) 
 
 const styles = StyleSheet.create({
   safe: {
-    backgroundColor: COLORS.background,
+    width: "100%",
   },
-  bar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 56,
+  container: {
+    minHeight: 60,
     paddingHorizontal: SPACING.md,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  logoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SPACING.xs,
+  side: {
+    width: 48,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  logo: {
+  center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
     fontFamily: FONTS.bold,
     fontSize: FONT_SIZES.title,
     color: COLORS.primary,
   },
   iconButton: {
-    padding: SPACING.xs,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  pressed: {
+    opacity: 0.6,
+    transform: [{ scale: 0.95 }],
   },
 });

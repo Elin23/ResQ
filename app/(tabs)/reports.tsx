@@ -1,16 +1,16 @@
 // app/(tabs)/reports.tsx
-import { useEffect, useState } from 'react';
-import { View, FlatList, Image, StyleSheet, ActivityIndicator } from 'react-native';
-import { Report, ReportStatus } from '../../src/types';
-import { getReports } from '../../src/services/reports';
-import { COLORS, SPACING, FONT_SIZES } from '../../src/constants/theme';
-import AppText from '../../src/components/AppText';
-import ReportCard from '@/src/components/ReportCard';
+import ReportCard from "@/src/components/ReportCard";
+import { getReports } from "@/src/services/reports";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
+import AppText from "../../src/components/AppText";
+import { COLORS, FONT_SIZES, SPACING } from "../../src/constants/theme";
+import { Report, ReportStatus } from "../../src/types";
 
 const STATUS_LABELS: Record<ReportStatus, string> = {
-  pending: 'معلق',
-  approved: 'معروض للمساعدة',
-  closed: 'مغلق',
+  pending: "معلق",
+  approved: "معروض للمساعدة",
+  closed: "مغلق",
 };
 
 const STATUS_COLORS: Record<ReportStatus, string> = {
@@ -43,7 +43,10 @@ export default function ReportsScreen() {
       data={reports}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <ReportCard report={item} onHelpPress={() => console.log('استجابة', item.id)} />
+        <ReportCard
+          report={item}
+          onHelpPress={() => console.log("استجابة", item.id)}
+        />
       )}
       ListEmptyComponent={
         <AppText style={styles.empty}>ما في بلاغات بعد</AppText>
@@ -53,33 +56,33 @@ export default function ReportsScreen() {
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
   list: { backgroundColor: COLORS.background },
   card: {
     backgroundColor: COLORS.surface,
     borderRadius: 12,
     margin: SPACING.md,
     marginBottom: 0,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
-  image: { width: '100%', height: 160 },
+  image: { width: "100%", height: 160 },
   cardBody: { padding: SPACING.md },
   description: {
     fontSize: FONT_SIZES.body,
     marginBottom: SPACING.sm,
   },
   badge: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     borderRadius: 20,
     paddingVertical: SPACING.xs,
     paddingHorizontal: SPACING.sm,
   },
   badgeText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: FONT_SIZES.label,
   },
   empty: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: SPACING.xl,
     color: COLORS.textSecondary,
   },

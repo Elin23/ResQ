@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "animal-care-app",
-    "slug": "animal-care-app",
+    "name": "ResQ",
+    "slug": "resq",
+    "scheme": "resq",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "animalcareapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -26,7 +26,8 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,

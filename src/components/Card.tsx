@@ -1,24 +1,74 @@
-import { View, ViewProps, StyleSheet } from 'react-native';
-import { COLORS, SPACING } from '../constants/theme';
+import {
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 
-export default function Card({ style, children, ...props }: ViewProps) {
+import { COLORS, RADIUS, SPACING } from "../constants/theme";
+
+type Props = PressableProps & {
+  children: React.ReactNode;
+  padding?: number;
+  radius?: number;
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  shadow?: boolean;
+  style?: StyleProp<ViewStyle>;
+};
+
+export default function Card({
+  children,
+  padding = SPACING.md,
+  radius = RADIUS.lg,
+  backgroundColor = COLORS.background,
+  borderColor = COLORS.border,
+  borderWidth = 0,
+  shadow = true,
+  style,
+  disabled,
+  ...props
+}: Props) {
   return (
-    <View style={[styles.card, style]} {...props}>
+    <Pressable
+      disabled={disabled}
+      style={({ pressed }) => [
+        styles.card,
+        shadow && styles.shadow,
+        {
+          padding,
+          borderRadius: radius,
+          backgroundColor,
+          borderColor,
+          borderWidth,
+          opacity: pressed ? 0.95 : 1,
+          transform: [{ scale: pressed ? 0.99 : 1 }],
+        },
+        style,
+      ]}
+      {...props}
+    >
       {children}
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.background,
-    borderRadius: 16,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,                    
+    width: "100%",
+    overflow: "hidden",
     marginBottom: SPACING.md,
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
   },
 });
