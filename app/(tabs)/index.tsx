@@ -28,10 +28,6 @@ export default function HomeScreen() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Under the app's global forceRTL, a "row" container mirrors its children:
-  // the first item lands on the physical right, the next on the left. These
-  // pairs are ordered so the visual result matches the Figma layout
-  // (feeding/adoption on the left, reports/clinics on the right).
   const quickActions: QuickAction[] = [
     {
       key: "reports",
@@ -121,9 +117,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  // Figma's root frame uses a single 32px gap between every top-level
-  // section (Auto layout gap: 32) — matched here via SPACING.xl instead of
-  // each section owning its own bottom margin.
   sections: {
     width: "100%",
     gap: SPACING.xl,
