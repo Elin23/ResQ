@@ -1,34 +1,43 @@
 import { AdoptionPost, FeedingPoint, Report } from "../types";
 
+const HOUR = 60 * 60 * 1000;
+const DAY = 24 * HOUR;
+
 export const mockReports: Report[] = [
   {
     id: "1",
-    description: "قطة مصابة برجلها قرب الجامع",
+    description: "كلب بلدي",
+    subtitle: "مصاب في قدمه",
     imageUrl: "https://placekitten.com/300/200",
+    locationName: "حلب",
     latitude: 33.5138,
     longitude: 36.2765,
     status: "approved",
-    createdAt: "2026-07-15T10:30:00",
+    createdAt: new Date(Date.now() - 2 * HOUR).toISOString(),
     userId: "u1",
   },
   {
     id: "2",
-    description: "كلب صغير ضايع بالحديقة",
+    description: "قط شيرازي",
+    subtitle: "مفقودة في حي الحمدانية",
     imageUrl: "https://placekitten.com/301/200",
+    locationName: "حلب",
     latitude: 33.5102,
     longitude: 36.2913,
     status: "pending",
-    createdAt: "2026-07-16T14:00:00",
+    createdAt: new Date(Date.now() - 5 * HOUR).toISOString(),
     userId: "u1",
   },
   {
     id: "3",
-    description: "قطة جوعانة مع صغارها",
+    description: "جرو صغير",
+    subtitle: "بحاجة لمأوى",
     imageUrl: "https://placekitten.com/302/200",
+    locationName: "دمشق",
     latitude: 33.5201,
     longitude: 36.282,
     status: "closed",
-    createdAt: "2026-07-10T09:15:00",
+    createdAt: new Date(Date.now() - 1 * DAY).toISOString(),
     userId: "u2",
   },
 ];
