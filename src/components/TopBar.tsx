@@ -1,89 +1,67 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from "react-native";
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { COLORS, FONTS, FONT_SIZES, SPACING } from "../constants/theme";
+import { COLORS, FONT_SIZES, SPACING } from "../constants/theme";
 import AppText from "./AppText";
 
-type IconName = keyof typeof Ionicons.glyphMap;
-
 type Props = {
-  title?: string;
-  leftIcon?: IconName;
-  rightIcon?: IconName;
-  onLeftPress?: () => void;
-  onRightPress?: () => void;
-  leftComponent?: React.ReactNode;
-  rightComponent?: React.ReactNode;
-  centerComponent?: React.ReactNode;
-  backgroundColor?: string;
+  onNotificationsPress?: () => void;
+  onSearchPress?: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export default function TopBar({
-  title = "ResQ",
-  leftIcon,
-  rightIcon,
-  onLeftPress,
-  onRightPress,
-  leftComponent,
-  rightComponent,
-  centerComponent,
-  backgroundColor = COLORS.background,
+  onNotificationsPress,
+  onSearchPress,
   style,
 }: Props) {
   return (
-    <SafeAreaView
-      edges={["top"]}
-      style={[
-        styles.safe,
-        {
-          backgroundColor,
-        },
-        style,
-      ]}
-    >
+    <SafeAreaView edges={["top"]} style={[styles.safe, style]}>
       <View style={styles.container}>
-        <View style={styles.side}>
-          {leftComponent ? (
-            leftComponent
-          ) : leftIcon ? (
-            <Pressable
-              onPress={onLeftPress}
-              style={({ pressed }) => [
-                styles.iconButton,
-                pressed && styles.pressed,
-              ]}
-            >
-              <Ionicons name={leftIcon} size={24} color={COLORS.text} />
-            </Pressable>
-          ) : null}
+        <View style={styles.logo}>
+          
+          <AppText weight="bold" size={FONT_SIZES.title}>
+            Res
+            <AppText weight="bold" size={FONT_SIZES.title} color={COLORS.primary}>
+              Q
+            </AppText>
+          </AppText>
+          <Ionicons name="paw" size={20} color={COLORS.black} />
         </View>
 
-        <View style={styles.center}>
-          {centerComponent ?? <AppText style={styles.title}>{title}</AppText>}
-        </View>
+        {/*
+          Global forceRTL mirrors every flex "row": the first child lands on
+          the physical right, the next on the left. Search is listed before
+          notifications so the on-screen order (left to right) comes out as
+          notifications, then search — matching the design.
+        */}
+        <View style={styles.iconGroup}>
+          <Pressable
+            onPress={onSearchPress}
+            hitSlop={8}
+            style={({ pressed }) => [
+              styles.iconButton,
+              pressed && styles.pressed,
+            ]}
+          >
+            <Ionicons name="search-outline" size={22} color={COLORS.text} />
+          </Pressable>
 
-        <View style={styles.side}>
-          {rightComponent ? (
-            rightComponent
-          ) : rightIcon ? (
-            <Pressable
-              onPress={onRightPress}
-              style={({ pressed }) => [
-                styles.iconButton,
-                pressed && styles.pressed,
-              ]}
-            >
-              <Ionicons name={rightIcon} size={24} color={COLORS.text} />
-            </Pressable>
-          ) : null}
+          <Pressable
+            onPress={onNotificationsPress}
+            hitSlop={8}
+            style={({ pressed }) => [
+              styles.iconButton,
+              pressed && styles.pressed,
+            ]}
+          >
+            <Ionicons
+              name="notifications-off-outline"
+              size={22}
+              color={COLORS.text}
+            />
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>
@@ -93,37 +71,32 @@ export default function TopBar({
 const styles = StyleSheet.create({
   safe: {
     width: "100%",
+    backgroundColor: COLORS.background,
   },
   container: {
-    minHeight: 60,
-    paddingHorizontal: SPACING.md,
+    height: 64,
+    paddingHorizontal: SPACING.lg,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
-  side: {
-    width: 48,
+  logo: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    gap: SPACING.xs,
   },
-  center: {
-    flex: 1,
+  iconGroup: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontFamily: FONTS.bold,
-    fontSize: FONT_SIZES.title,
-    color: COLORS.primary,
+    gap: SPACING.sm,
   },
   iconButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 36,
+    height: 36,
     alignItems: "center",
     justifyContent: "center",
   },
   pressed: {
     opacity: 0.6,
-    transform: [{ scale: 0.95 }],
   },
 });
