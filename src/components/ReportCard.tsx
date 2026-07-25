@@ -23,7 +23,7 @@ export default function ReportCard({ report, onHelpPress }: Props) {
 
   return (
     <Card>
-      <View>
+      <View style={styles.imageWrapper}>
         <Image source={{ uri: report.imageUrl }} style={styles.image} />
         <View style={styles.chipOverlay}>
           <Chip label={status.label} color={status.color} />
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     start: SPACING.sm,           
   },
   body: {
+    width: '100%',
     padding: SPACING.md,
     gap: SPACING.sm,
   },
@@ -70,5 +71,8 @@ const styles = StyleSheet.create({
   location: {
     fontSize: FONT_SIZES.label,
     color: COLORS.textSecondary,
+  },
+  imageWrapper: {
+    width: '100%',
   },
 });

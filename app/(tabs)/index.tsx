@@ -59,7 +59,7 @@ export default function HomeScreen() {
       label: "الحيوانات للتبني",
       icon: "paw",
       color: COLORS.brown,
-      onPress: () => router.push("/adoption"),
+      onPress: () => router.push("/login"),
     },
   ];
 

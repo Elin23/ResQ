@@ -29,9 +29,9 @@ export default function GuestPromoCard({ onCreateAccount, onLogin }: Props) {
             {row.map((benefit) => (
               <View key={benefit} style={styles.benefitItem}>
                 <Ionicons
-                  name="checkmark-circle"
+                  name="checkmark-circle-outline"
                   size={18}
-                  color={COLORS.secondary}
+                  color={COLORS.bggreen}
                 />
                 <AppText size={FONT_SIZES.body}>{benefit}</AppText>
               </View>
