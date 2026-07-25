@@ -24,7 +24,7 @@ export default function SectionHeader({
         <Pressable onPress={onActionPress} hitSlop={8}>
           <AppText
             weight="medium"
-            color={COLORS.primary}
+            color={COLORS.brown}
             size={FONT_SIZES.body}
           >
             {actionLabel}
