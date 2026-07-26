@@ -3,7 +3,9 @@ export type ReportStatus = "pending" | "approved" | "closed";
 export interface Report {
   id: string;
   description: string;
+  subtitle: string;
   imageUrl: string;
+  locationName: string;
   latitude: number;
   longitude: number;
   status: ReportStatus;

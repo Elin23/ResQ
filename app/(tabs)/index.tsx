@@ -1,98 +1,147 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import AppText from "@/src/components/AppText";
+import GuestPromoCard from "@/src/components/GuestPromoCard";
+import QuickActionGrid, {
+  QuickAction,
+} from "@/src/components/QuickActionGrid";
+import ReportCallout from "@/src/components/ReportCallout";
+import ReportPreviewCard from "@/src/components/ReportPreviewCard";
+import Screen from "@/src/components/Screen";
+import SectionHeader from "@/src/components/SectionHeader";
+import { COLORS, FONT_SIZES, SPACING } from "@/src/constants/theme";
+import { getReports } from "@/src/services/reports";
+import { Report } from "@/src/types";
+
+const LATEST_REPORTS_COUNT = 3;
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const router = useRouter();
+  const [reports, setReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  useEffect(() => {
+    getReports()
+      .then((data) => setReports(data.slice(0, LATEST_REPORTS_COUNT)))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const quickActions: QuickAction[] = [
+    {
+      key: "reports",
+      label: "البلاغات",
+      icon: "warning",
+      color: COLORS.danger,
+      onPress: () => router.push("/reports"),
+    },
+    {
+      key: "feeding",
+      label: "نقاط الإطعام",
+      icon: "location",
+      color: COLORS.bggreen,
+      onPress: () => router.push("/map"),
+    },
+    {
+      key: "clinics",
+      label: "العيادات البيطرية",
+      icon: "medkit",
+      color: COLORS.bgblue,
+      onPress: () => router.push("/map"),
+    },
+    {
+      key: "adoption",
+      label: "الحيوانات للتبني",
+      icon: "paw",
+      color: COLORS.brown,
+      onPress: () => router.push("/login"),
+    },
+  ];
+
+  return (
+    <Screen scroll safeAreaEdges={["left", "right"]}>
+      <View style={styles.sections}>
+        <View style={styles.greeting}>
+          <View style={styles.greetingRow}>
+            <AppText
+              weight="bold"
+              size={FONT_SIZES.headline}
+              style={styles.greetingText}
+            >
+              مرحباً بك في ResQ
+            </AppText>
+            <AppText weight="bold" size={FONT_SIZES.headline}>
+              👋
+            </AppText>
+          </View>
+
+          <AppText color={COLORS.textSecondary} style={styles.subtitle}>
+            ساعد الحيوانات المحتاجة أو استكشف البلاغات القريبة منك.
+          </AppText>
+        </View>
+
+        <ReportCallout onReportPress={() => router.push("/reports")} />
+
+        <QuickActionGrid actions={quickActions} />
+
+        <View style={styles.reportsSection}>
+          <SectionHeader
+            title="أحدث البلاغات"
+            actionLabel="عرض الكل"
+            onActionPress={() => router.push("/reports")}
+          />
+
+          {loading ? (
+            <ActivityIndicator size="large" color={COLORS.primary} />
+          ) : (
+            <View style={styles.reportsList}>
+              {reports.map((report) => (
+                <ReportPreviewCard
+                  key={report.id}
+                  report={report}
+                  onPress={() => router.push("/reports")}
+                />
+              ))}
+            </View>
+          )}
+        </View>
+
+        <GuestPromoCard
+          onCreateAccount={() => router.push("/choose-account")}
+          onLogin={() => router.push("/login")}
+        />
+      </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  sections: {
+    width: "100%",
+    gap: SPACING.xl,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  greeting: {
+    width: "100%",
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  subtitle: {
+    width: "100%",
+    marginTop: SPACING.xs,
+    textAlign: "auto",
+  },
+  reportsSection: {
+    width: "100%",
+  },
+  reportsList: {
+    width: "100%",
+    gap: SPACING.md,
+  },
+  greetingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: SPACING.xs,
+  },
+  greetingText: {
+    textAlign: "right",
   },
 });
