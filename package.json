@@ -4,15 +4,11 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
+    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint",
-    "typecheck": "tsc --noEmit",
-    "check": "npm run check:integrity && npm run typecheck && npm run lint && npm run test",
-    "check:integrity": "node scripts/check-project-integrity.mjs",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "lint": "expo lint"
   },
   "dependencies": {
     "@expo-google-fonts/ibm-plex-sans-arabic": "^0.4.2",
@@ -51,8 +47,7 @@
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
-    "typescript": "~5.9.2",
-    "vitest": "^3.2.4"
+    "typescript": "~5.9.2"
   },
   "private": true
 }

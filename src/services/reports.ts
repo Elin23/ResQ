@@ -1,27 +1,27 @@
-import { APP_CONFIG } from "@/src/constants/config";
-import { mockReports } from "@/src/data/mockData";
-import { apiRequest } from "@/src/services/api/client";
-import { Report } from "@/src/types";
+import { mockReports } from "../data/mockData";
+import { Report } from "../types";
 
-const delay = (ms: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, ms));
+const USE_MOCK = true; //هي بنغيرها ل false بس نضيف الباك
+const API_URL = "http://your-backend-later.com/api";
+
+// تأخير وهمي ليشبه طلب إنترنت حقيقي
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function getReports(): Promise<Report[]> {
-  if (APP_CONFIG.useMockApi) {
-    await delay(350);
+  if (USE_MOCK) {
+    await delay(500);
     return mockReports;
   }
-
-  return apiRequest<Report[]>("/reports");
+  const res = await fetch(`${API_URL}/reports`);
+  if (!res.ok) throw new Error("فشل تحميل البلاغات");
+  return res.json();
 }
 
-export async function getReportById(
-  id: string,
-): Promise<Report | undefined> {
-  if (APP_CONFIG.useMockApi) {
-    await delay(200);
-    return mockReports.find((report) => report.id === id);
+export async function getReportById(id: string): Promise<Report | undefined> {
+  if (USE_MOCK) {
+    await delay(300);
+    return mockReports.find((r) => r.id === id);
   }
-
-  return apiRequest<Report>(`/reports/${encodeURIComponent(id)}`);
+  const res = await fetch(`${API_URL}/reports/${id}`);
+  return res.json();
 }

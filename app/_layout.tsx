@@ -4,18 +4,32 @@ import {
   IBMPlexSansArabic_700Bold,
   useFonts,
 } from "@expo-google-fonts/ibm-plex-sans-arabic";
+<<<<<<< HEAD
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+=======
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { Stack } from "expo-router";
+>>>>>>> 5f4a354c8632b09b2c8785d2eebd30ffed989cf6
 import { StatusBar } from "expo-status-bar";
 import { I18nManager } from "react-native";
 import "react-native-reanimated";
 
+<<<<<<< HEAD
 import { COLORS } from "@/src/theme";
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   // The splash screen may already be controlled by Expo during fast refresh.
 });
+=======
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { COLORS } from "@/src/constants/theme";
+>>>>>>> 5f4a354c8632b09b2c8785d2eebd30ffed989cf6
 
 I18nManager.allowRTL(true);
 I18nManager.forceRTL(true);
@@ -34,7 +48,18 @@ const LightNavigationTheme = {
   ...DefaultTheme,
   colors: { ...DefaultTheme.colors, background: COLORS.background, card: COLORS.white },
 };
+<<<<<<< HEAD
 export default function RootLayout() {
+=======
+const DarkNavigationTheme = {
+  ...DarkTheme,
+  colors: { ...DarkTheme.colors, background: COLORS.background, card: COLORS.white },
+};
+
+export default function RootLayout() {
+  const colorScheme = useColorScheme();
+
+>>>>>>> 5f4a354c8632b09b2c8785d2eebd30ffed989cf6
   const [fontsLoaded] = useFonts({
     IBMPlexSansArabic_400Regular,
     IBMPlexSansArabic_500Medium,
@@ -45,12 +70,17 @@ export default function RootLayout() {
     return null;
   }
 
+<<<<<<< HEAD
   SplashScreen.hideAsync().catch(() => {
     // Safe fallback when the native splash screen has already been hidden.
   });
 
   return (
     <ThemeProvider value={LightNavigationTheme}>
+=======
+  return (
+    <ThemeProvider value={colorScheme === "dark" ? DarkNavigationTheme : LightNavigationTheme}>
+>>>>>>> 5f4a354c8632b09b2c8785d2eebd30ffed989cf6
       <Stack
         screenOptions={{
           headerShown: false,
